@@ -1,0 +1,5 @@
+5:20:06
+
+about 5:05:50 the 'createdAt' props causes an error "Objects are not valid as a React child (found: object with keys {_seconds, _nanoseconds})".
+This is because the 'createdAt' field is of type TimeStamp and it returns an object of seconds and nanoseconds. React props doesn't allow objects but arrays.
+The best workaround is to store your createdAt as a string not a timestamp.
