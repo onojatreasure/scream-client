@@ -1,5 +1,24 @@
-5:20:06
+6:40:10
 
-about 5:05:50 the 'createdAt' props causes an error "Objects are not valid as a React child (found: object with keys {_seconds, _nanoseconds})".
-This is because the 'createdAt' field is of type TimeStamp and it returns an object of seconds and nanoseconds. React props doesn't allow objects but arrays.
+about 5:05:50 the 'createdAt' props causes an error "Objects are not valid as a React 
+child (found: object with keys {_seconds, _nanoseconds})".
+This is because the 'createdAt' field is of type TimeStamp and it returns an object 
+of seconds and nanoseconds. React props doesn't allow objects but arrays.
 The best workaround is to store your createdAt as a string not a timestamp.
+
+about 5:52:24. After changing the 'styles' object in signup and login to a function 
+with a spread operator, you get the following error: "TypeError: color.charAt is 
+not a function in C:/…/node_modules/@material-ui/core/styles/colorManipulator.js:148".
+My solution is to put all styling objects inside another object (let me call in 'pageStyle') 
+leaving out the (palette) 
+object, and spread out only that object that does not contain the (palette). 
+In App.js, 'theme' will have two style objects (palette and pageStyle). 
+You call pageStyle by adding a dot in the spreadoperator.
+
+About 6:15:10. On adding arguments to 'compose' function in store.js, be sure to leave out 
+the last agrument. Just stop at the 'applyMiddleware(...middleware)'. Else 
+'Redux TypeError: Cannot read property 'apply' of undefined' error will show up.
+The issue is that compose from redux expects all its arguments to be functions.
+So when
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() 
+is evaluated in that environment it returns a boolean.
