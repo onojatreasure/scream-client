@@ -30,6 +30,16 @@ class login extends Component {
         }
     }
 
+    static getDerivedStateFromProps(props) {
+        if (props.UI.errors) {
+          return {
+            errors: props.UI.errors
+          }
+        }
+        // Return null if the state hasn't changed
+        return null;
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
         const userData = {

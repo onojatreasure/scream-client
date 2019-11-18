@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import themeFile from './util/theme';
+import themeObject from './util/theme';
 import jwtDecode from 'jwt-decode';
 
 //redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import { SET_AUTHENTICATED } from './redux/types';
+import { logoutUser, getUserData } from './redux/actions/userActions';
 
 //components
 import Navbar from './components/Navbar';
@@ -18,18 +20,20 @@ import home from './pages/home';
 import login from './pages/login';
 import signup from './pages/signup';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import Axios from 'axios';
 
-const theme = createMuiTheme(themeFile);
+const theme = createMuiTheme(themeObject);
 
-let authenticated;
 const token = localStorage.FBIdToken;
 if(token){
   const decodedToken = jwtDecode(token);
   if(decodedToken.exp * 1000 < Date.now()){
     window.location.href = '/login';
-    authenticated = false;
+    store.dispatch(logoutUser())
   } else {
-    authenticated = true;
+    store.dispatch({ type: SET_AUTHENTICATED });
+    Axios.defaults.headers.common['Authorization'] = token;
+    store.dispatch(getUserData());
   }
 }
 
@@ -46,10 +50,12 @@ class App extends Component {
                 <AuthRoute 
                   exact path="/login" 
                   component={login} 
-                  authenticated={authenticated}/>
-                <AuthRoute exact 
+                />
+                <AuthRoute 
+                  exact 
                   path="/signup" 
-                  component={signup} authenticated={authenticated}/>
+                  component={signup}
+                />
               </Switch>
             </div>
           </Router>
